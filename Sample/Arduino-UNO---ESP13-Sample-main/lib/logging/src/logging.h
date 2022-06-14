@@ -1,8 +1,6 @@
 #ifndef LOGGING_H
 #define LOGGING_H
 
-#include <types.h>
-
 #define LOG_LEVEL_VERBOSE 0
 #define LOG_LEVEL_DEBUG 1
 #define LOG_LEVEL_INFO 2
@@ -10,7 +8,7 @@
 #define LOG_LEVEL_ERROR 4
 
 #ifndef LOG_LEVEL
-#define LOG_LEVEL LOG_LEVEL_VERBOSE
+#define LOG_LEVEL LOG_LEVEL_ERROR
 #endif
 
 typedef enum LOG_CATEGORY

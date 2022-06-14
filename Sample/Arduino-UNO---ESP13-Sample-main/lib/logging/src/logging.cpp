@@ -2,7 +2,6 @@
 
 #include <Arduino.h>
 #include <stdarg.h>
-#include <types.h>
 
 #define LOGGING_TRACE_STRING    "\033[35mTRACE: "
 #define LOGGING_DEBUG_STRING    "\033[34mDEBUG: "
@@ -44,7 +43,9 @@ void LOGGING_LOG(LOG_CATEGORY category, const char *format, ...)
     va_list args;
     char buffer[256];
 
-    Serial.printf(logging_get_category_string(category));
+    Serial.flush();
+
+    Serial.print(logging_get_category_string(category));
 
     va_start(args, format);
     vsprintf(buffer, format, args);
@@ -52,4 +53,5 @@ void LOGGING_LOG(LOG_CATEGORY category, const char *format, ...)
 
     Serial.print(buffer);
     Serial.println(LOGGING_END_COLOR);
+    Serial.flush();
 }
