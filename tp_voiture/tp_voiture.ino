@@ -10,24 +10,22 @@ UARTWifi uartWiFi;
 
 
 #define STA
-#define TCP_BUFFER_SIZE 128
 
 #define WIFI_SSID "aled"
 #define WIFI_PWD "12345678"
+//pour se connecter, ouvrir terminal unix + saisir [nc 192.168.43.100 8080] (en remplaçant adresse par celle utilisée lors de la connexion)
 
 #ifndef ENCRYPTION_TYPE
 #define ENCRYPTION_TYPE WIFI_AUTH_OPEN
 #endif
 
+
+#define TCP_BUFFER_SIZE 128
 Array<ACCESS_POINT, MAX_SCAN_RESULT_COUNT> scan_results;
 char tcp_buffer[TCP_BUFFER_SIZE];
 
-#ifndef ENCRYPTION_TYPE
-#define ENCRYPTION_TYPE WIFI_AUTH_OPEN
-#endif
 
 SERVER_CONFIG config;
-
 
 
 int PIN_VERT=11;
@@ -42,9 +40,8 @@ void setup()
 {
   initLED();
   initButton();
+  
   uartWiFi.begin();
-
-  //connect_soft_accesspoint(WIFI_SSID, WIFI_PWD, 6);
   connect_to_station(WIFI_SSID, WIFI_PWD);
 
   start_web_server();
@@ -52,17 +49,8 @@ void setup()
 
 void loop()
 {
-  delay(100);
-   valueButton=digitalRead(PIN_BUTTON); 
-    Serial.println(tcp_buffer);
-    if (valueButton==LOW){
-      if(isTurnedOn)
-        turnOffLED();
-      else
-        turnOnLED();   
-      isTurnedOn=!isTurnedOn; 
-      delay(200);
-    }
+    delay(100);
+    buttonAction();
     Array<TCP_CHANNEL, 4> tcp_channels;
     if (!uartWiFi.getClientStatus(&tcp_channels))
       return;
@@ -72,7 +60,27 @@ void loop()
       }
       uartWiFi.readData(tcp_buffer, tcp_channels[i].channel, TCP_BUFFER_SIZE);   
       Serial.println(tcp_buffer);
-      if(isTurnedOn){
+      switchColorKeyboardEnter();     
+      uartWiFi.send(tcp_channels[i].channel, tcp_buffer);
+    }
+
+//  tcp_channels.clear();
+}
+
+void buttonAction(){
+   valueButton=digitalRead(PIN_BUTTON); 
+    if (valueButton==LOW){
+      if(isTurnedOn)
+        turnOffLED();
+      else
+        turnOnLED();   
+      isTurnedOn=!isTurnedOn; 
+      delay(200);
+    }
+}
+
+void switchColorKeyboardEnter(){
+   if(isTurnedOn){
         if(tcp_buffer[0]== 'r'){
           redLED();
         }else if(tcp_buffer[0]=='g'){
@@ -85,12 +93,7 @@ void loop()
           turnOnLED();
         }
       }
-      uartWiFi.send(tcp_channels[i].channel, tcp_buffer);
-    }
-
-//  tcp_channels.clear();
 }
-
 
 void initButton(){
   pinMode(PIN_BUTTON,INPUT);
