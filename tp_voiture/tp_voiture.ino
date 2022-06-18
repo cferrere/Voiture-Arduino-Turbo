@@ -12,8 +12,8 @@ UARTWifi uartWiFi;
 #define STA
 #define TCP_BUFFER_SIZE 128
 
-#define WIFI_SSID "Galaxy A52A9AC"
-#define WIFI_PWD "dmrv8238"
+#define WIFI_SSID "aled"
+#define WIFI_PWD "12345678"
 
 #ifndef ENCRYPTION_TYPE
 #define ENCRYPTION_TYPE WIFI_AUTH_OPEN
@@ -28,8 +28,15 @@ char tcp_buffer[TCP_BUFFER_SIZE];
 
 SERVER_CONFIG config;
 
+
+
+int PIN_VERT=11;
+int PIN_ROUGE=10;
+int PIN_BLEU=9;
+
 void setup()
 {
+  initLED();
   uartWiFi.begin();
 
   //connect_soft_accesspoint(WIFI_SSID, WIFI_PWD, 6);
@@ -56,20 +63,41 @@ void loop()
     uartWiFi.readData(tcp_buffer, tcp_channels[i].channel, TCP_BUFFER_SIZE);
     
     Serial.println(tcp_buffer);
+    if(tcp_buffer[0]== 'h'){
+      turnOnLED();
+    }else if(tcp_buffer[0]=='l'){
+      turnOffLED();
+    }
 
-    uartWiFi.send(tcp_channels[i].channel, tcp_buffer);
+    //uartWiFi.send(tcp_channels[i].channel, tcp_buffer);
   }
 
   tcp_channels.clear();
 }
+
+void initLED(){
+    pinMode(PIN_VERT,OUTPUT);
+    pinMode(PIN_ROUGE,OUTPUT);
+    pinMode(PIN_BLEU,OUTPUT);
+}
+void turnOnLED(){  
+    digitalWrite(PIN_VERT, 128);
+    digitalWrite(PIN_ROUGE, 128);
+    digitalWrite(PIN_BLEU, 128);
+}
+void turnOffLED(){  
+    digitalWrite(PIN_VERT, 0);
+    digitalWrite(PIN_ROUGE, 0);
+    digitalWrite(PIN_BLEU, 0);
+}
+
 
 void start_web_server()
 {
     if (!uartWiFi.createServer(8080))
     {
         LogErr("Failed to start web server");
-        while (1)
-            ;
+        while (1);
     }
 
     LogInfo("Web server started");
@@ -91,11 +119,6 @@ void connect_to_station(const char *ssid, const char *pwd)
 
   LogInfo("Access points found : %d", scan_results.size());
 
-  // for (ACCESS_POINT ap : scan_results)
-  // {
-  //   if (strcmp(ap.ssid, ssid) != 0)
-  //     continue;
-
   LogInfo("Connecting to %s", ssid);
 
   uartWiFi.configureWiFiMode(STATION);
@@ -107,10 +130,8 @@ void connect_to_station(const char *ssid, const char *pwd)
   else
   {
     LogErr("Failed to connect to %s", ssid);
-    while (1)
-      ;
+    while (1);
   }
-  // }
 
   scan_results.clear();
 
