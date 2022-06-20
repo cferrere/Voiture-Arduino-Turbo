@@ -6,4 +6,5 @@
     <string name="invalidPort">Port is invalid.</string>
     <string name="invalidHost">Invalid host</string>
     <string name="socketNotConnected">Please connect socket before using this.</string>
+    <string name="socketConnected">Connected !</string>
 </resources>

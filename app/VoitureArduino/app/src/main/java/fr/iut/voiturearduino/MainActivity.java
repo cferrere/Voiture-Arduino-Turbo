@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.net.InetAddresses;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         setContentView(R.layout.activity_main);
 
@@ -75,6 +79,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void connectSocket() {
         try {
+            if (client != null) {
+                client.close();
+                client = null;
+                output = null;
+                writer = null;
+            }
+
             String host = inputHost.getText().toString();
             int port = Integer.parseInt(inputPort.getText().toString());
 
@@ -94,7 +105,9 @@ public class MainActivity extends AppCompatActivity {
             output = client.getOutputStream();
             writer = new PrintWriter(output, true);
 
+            messageTv.setText(R.string.socketConnected);
         }catch(Exception e) {
+            e.printStackTrace();
             messageTv.setText(R.string.errorSocket);
         }
     }
