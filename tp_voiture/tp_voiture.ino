@@ -27,6 +27,14 @@ char tcp_buffer[TCP_BUFFER_SIZE];
 
 SERVER_CONFIG config;
 
+//Motor 1
+const int motorPin1 = 8;//forward
+const int motorPin2 = 5;//backward
+//Motor 2
+const int motorPin3 = 6;
+const int motorPin4 = 7;
+int speed = 180;
+
 
 int PIN_VERT=11;
 int PIN_ROUGE=10;
@@ -38,8 +46,9 @@ bool isTurnedOn=false;
 
 void setup()
 {
-  initLED();
-  initButton();
+//  initLED();
+//  initButton();
+  initMotor();
   
   uartWiFi.begin();
   connect_to_station(WIFI_SSID, WIFI_PWD);
@@ -49,22 +58,82 @@ void setup()
 
 void loop()
 {
-    delay(100);
+    delay(400);
     buttonAction();
     Array<TCP_CHANNEL, 4> tcp_channels;
-    if (!uartWiFi.getClientStatus(&tcp_channels))
+    if (!uartWiFi.getClientStatus(&tcp_channels)){
       return;
+    }
     for (unsigned int i = 0; i < tcp_channels.size(); i++)  {
-      if (tcp_channels[i].size <= 0)    {
-        continue;
-      }
       uartWiFi.readData(tcp_buffer, tcp_channels[i].channel, TCP_BUFFER_SIZE);   
-      Serial.println(tcp_buffer);
-      switchColorKeyboardEnter();     
-      uartWiFi.send(tcp_channels[i].channel, tcp_buffer);
+//      Serial.println(tcp_buffer[0]);
+      moveCar(tcp_buffer[0]);
+//      switchColorKeyboardEnter();     
+//      uartWiFi.send(tcp_channels[i].channel, tcp_buffer);
     }
 
 //  tcp_channels.clear();
+}
+
+void initMotor(){
+  pinMode(motorPin1, OUTPUT);
+  pinMode(motorPin2, OUTPUT);
+  pinMode(motorPin3, OUTPUT);
+  pinMode(motorPin4, OUTPUT);
+  
+}
+void test(){
+  //Motor Control A in both directions
+  analogWrite(motorPin1, speed);
+  delay(2000);
+  analogWrite(motorPin1, 0);
+  delay(200);
+  analogWrite(motorPin2, speed);
+  delay(2000);
+  analogWrite(motorPin2, 0);
+  //Motor Control B in both directions
+  analogWrite(motorPin3, speed);
+  delay(2000);
+  analogWrite(motorPin3, 0);
+  delay(200);
+  analogWrite(motorPin4, speed);
+  delay(2000);
+  analogWrite(motorPin4, 0);
+}
+
+void moveCar(char command){
+  switch(command){
+    case 'l':
+      analogWrite(motorPin1, speed);
+      analogWrite(motorPin2, 0);
+      analogWrite(motorPin3, 0);
+      analogWrite(motorPin4, speed);
+    break;
+    case 'r':
+      analogWrite(motorPin1, 0);
+      analogWrite(motorPin2, speed);
+      analogWrite(motorPin3, speed);
+      analogWrite(motorPin4, 0);
+    break;
+    case 'f':    
+      analogWrite(motorPin1, speed);
+      analogWrite(motorPin2, 0);
+      analogWrite(motorPin3, speed);
+      analogWrite(motorPin4, 0);
+    break;
+    case 'b':
+      analogWrite(motorPin1, 0);
+      analogWrite(motorPin2, speed);
+      analogWrite(motorPin3, 0);
+      analogWrite(motorPin4, speed);
+    break;
+    case 's':
+      analogWrite(motorPin1, 0);
+      analogWrite(motorPin2, 0);
+      analogWrite(motorPin3, 0);
+      analogWrite(motorPin4, 0);
+    
+  }
 }
 
 void buttonAction(){
