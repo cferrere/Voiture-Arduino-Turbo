@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">VoitureArduino</string>
+    <string name="title">Turbo Voiture Arduino</string>
+    <string name="errorSocket">An error occured while connecting socket.</string>
+    <string name="emptyHost">Host cannot be empty.</string>
+    <string name="invalidPort">Port is invalid.</string>
+    <string name="invalidHost">Invalid host</string>
+    <string name="socketNotConnected">Please connect socket before using this.</string>
+</resources>
