@@ -13,7 +13,6 @@ UARTWifi uartWiFi;
 
 #define WIFI_SSID "aled"
 #define WIFI_PWD "12345678"
-//pour se connecter, ouvrir terminal unix + saisir [nc 192.168.43.100 8080] (en remplaçant adresse par celle utilisée lors de la connexion)
 
 #ifndef ENCRYPTION_TYPE
 #define ENCRYPTION_TYPE WIFI_AUTH_OPEN
@@ -35,19 +34,8 @@ const int motorPin3 = 6;
 const int motorPin4 = 7;
 int speed = 180;
 
-
-int PIN_VERT=11;
-int PIN_ROUGE=10;
-int PIN_BLEU=9;
-
-int PIN_BUTTON=2;
-int valueButton=0;
-bool isTurnedOn=false;
-
 void setup()
 {
-//  initLED();
-//  initButton();
   initMotor();
   
   uartWiFi.begin();
@@ -65,14 +53,9 @@ void loop()
       return;
     }
     for (unsigned int i = 0; i < tcp_channels.size(); i++)  {
-      uartWiFi.readData(tcp_buffer, tcp_channels[i].channel, TCP_BUFFER_SIZE);   
-//      Serial.println(tcp_buffer[0]);
+      uartWiFi.readData(tcp_buffer, tcp_channels[i].channel, TCP_BUFFER_SIZE);
       moveCar(tcp_buffer[0]);
-//      switchColorKeyboardEnter();     
-//      uartWiFi.send(tcp_channels[i].channel, tcp_buffer);
     }
-
-//  tcp_channels.clear();
 }
 
 void initMotor(){
@@ -81,24 +64,6 @@ void initMotor(){
   pinMode(motorPin3, OUTPUT);
   pinMode(motorPin4, OUTPUT);
   
-}
-void test(){
-  //Motor Control A in both directions
-  analogWrite(motorPin1, speed);
-  delay(2000);
-  analogWrite(motorPin1, 0);
-  delay(200);
-  analogWrite(motorPin2, speed);
-  delay(2000);
-  analogWrite(motorPin2, 0);
-  //Motor Control B in both directions
-  analogWrite(motorPin3, speed);
-  delay(2000);
-  analogWrite(motorPin3, 0);
-  delay(200);
-  analogWrite(motorPin4, speed);
-  delay(2000);
-  analogWrite(motorPin4, 0);
 }
 
 void moveCar(char command){
@@ -134,74 +99,6 @@ void moveCar(char command){
       analogWrite(motorPin4, 0);
     
   }
-}
-
-void buttonAction(){
-   valueButton=digitalRead(PIN_BUTTON); 
-    if (valueButton==LOW){
-      if(isTurnedOn)
-        turnOffLED();
-      else
-        turnOnLED();   
-      isTurnedOn=!isTurnedOn; 
-      delay(200);
-    }
-}
-
-void switchColorKeyboardEnter(){
-   if(isTurnedOn){
-        if(tcp_buffer[0]== 'r'){
-          redLED();
-        }else if(tcp_buffer[0]=='g'){
-          greenLED();
-        }
-        else if(tcp_buffer[0]=='b'){
-          blueLED();
-        }
-        else if(tcp_buffer[0]=='a'){
-          turnOnLED();
-        }
-      }
-}
-
-void initButton(){
-  pinMode(PIN_BUTTON,INPUT);
-}
-
-void initLED(){
-    pinMode(PIN_VERT,OUTPUT);
-    pinMode(PIN_ROUGE,OUTPUT);
-    pinMode(PIN_BLEU,OUTPUT);
-    turnOffLED();
-}
-
-void turnOnLED(){  
-    digitalWrite(PIN_VERT, 128);
-    digitalWrite(PIN_ROUGE, 128);
-    digitalWrite(PIN_BLEU, 128);
-}
-void turnOffLED(){  
-    digitalWrite(PIN_VERT, 0);
-    digitalWrite(PIN_ROUGE, 0);
-    digitalWrite(PIN_BLEU, 0);
-}
-
-void blueLED(){
-    digitalWrite(PIN_BLEU, 128);  
-    digitalWrite(PIN_VERT, 0);
-    digitalWrite(PIN_ROUGE, 0);
-}
-
-void redLED(){
-    digitalWrite(PIN_BLEU, 0);  
-    digitalWrite(PIN_VERT, 0);
-    digitalWrite(PIN_ROUGE, 128);
-}
-
-void greenLED(){
-    digitalWrite(PIN_BLEU, 0);  
-    digitalWrite(PIN_VERT, 128);
-    digitalWrite(PIN_ROUGE, 0);
 }
 
 void start_web_server()
