@@ -23,7 +23,7 @@ Le projet utilise une librairie conçue par Mr.Kévin BEAUGRAND, ainsi que d'aut
 
 Voici un schéma représentant le montage de notre solution :
 
-INSERER LE SCHEMA
+![Schéma TinkerCad](./image.png)
 
 :warning: Ce schéma ne représente pas le montage obtenu sur la voiture, mais plutôt une solution afin de gérer correctement les moteurs à l'aide du fichier Arduino. Le Shield ESP8266 ainsi que le module SBC n'étant pas disponibles sur le site utilisé pour le schéma (TINKERCAD), nous avons dû nous adapter. :warning:
 
