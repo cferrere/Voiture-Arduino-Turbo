@@ -6,6 +6,13 @@ Ce projet est issu de la matière "IoT" de la Licence Professionnelle Mobile à 
 
 L'objectif est de contrôler,à l'aide de son téléphone, une mini-voiture électrique disposant de 4 moteurs : un par roue.
 
+## Branches GIT
+  
+La version du fichier .ino sur la branche "main" contient de nombreuses fonctions inutilisées concernant une LED RGB et un bouton poussoir ainsi que des lignes commentées issues de divers tests. La branche "main" contient également une copie du Sample fourni par Mr.Kévin BEAUGRAND.
+
+Il existe donc une version simplifiée du projet dans la branche "test_simplification", où le sample ainsi que le surplus de code a été enlevé.  
+:warning: Ce code n'a pas été testé et bien qu'il soit censé fonctionner, ce n'est peut-être pas le cas ! :warning: 
+
 ## Équipement, Appareils & Librairies
 
 Le projet a été conçu avec les équipements et appareils suivants :
@@ -44,7 +51,6 @@ Une fois l'application démarrée, entrez l'adresse ip de la carte Arduino (visi
 
 Vous pouvez maintenant contrôler la voiture avec votre smartphone. 
 
-## Note
 
 
 ## Auteurs
