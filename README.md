@@ -28,7 +28,24 @@ Voici un schéma représentant le montage de notre solution :
 :warning: Ce schéma ne représente pas le montage obtenu sur la voiture, mais plutôt une solution afin de gérer correctement les moteurs à l'aide du fichier Arduino. Le Shield ESP8266 ainsi que le module SBC n'étant pas disponibles sur le site utilisé pour le schéma (TINKERCAD), nous avons dû nous adapter. :warning:
 
 ## Application
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+
+Afin d'utiliser la carte Arduino : 
+- Ouvrez le fichier .ino dans le dossier "tp_voiture",
+- Ajoutez les librairies au projet (si nécessaire),
+- Configurez les variables WIFI_SSID et WIFI_PWD pour qu'elles correspondent au réseau Wi-Fi que vous souhaitez utiliser (a fonctionné avec un téléphone en point d'accès mobile),
+- Transférez le programme,
+- Effectuez un Reset de la carte.
+
+Afin d'utiliser l'application mobile :
+- Connectez votre téléphone Android au réseau Wi-Fi que vous souhaitez utiliser,
+- Ouvrez le projet dans le dossier "app" avec Android Studio,
+- Lancer le projet sur votre téléphone (un émulateur ne pourra pas communiquer avec la voiture),
+Une fois l'application démarrée, entrez l'adresse ip de la carte Arduino (visible chez l'hôte) et le port 8080, puis appuyez sur le bouton "Connecter". 
+
+Vous pouvez maintenant contrôler la voiture avec votre smartphone. 
+
+## Note
+
 
 ## Auteurs
 Emma GUILBAULT
